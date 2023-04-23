@@ -1,0 +1,13 @@
+// Place your key bindings in this file to overwrite the defaults
+[
+	{
+	   "key": "ctrl+d",
+	   "command": "workbench.action.tasks.runTask",
+	   "args": "PyFRC: Deploy current project to the RoboRio and run it"
+	},
+	{
+		"key": "ctrl+shift+d",
+		"command": "workbench.action.tasks.runTask",
+		"args": "PyFRC: Run current project in the PyFRC simulator"
+	 }
+]

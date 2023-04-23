@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"editor.tabSize": 4,
+		"files.trimTrailingWhitespace": true,
+		"autoDocstring.guessTypes": true,
+		"autoDocstring.newlineBeforeSummary": true,
+		"terminal.explorerKind": "external",
+		"editor.insertSpaces": false,
+		"editor.detectIndentation": false,
+		"breadcrumbs.enabled": true,
+	}
+}

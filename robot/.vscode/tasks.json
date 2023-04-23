@@ -1,0 +1,67 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+         {
+             "label": "PyFRC: _Kill Python process",
+             "type": "shell",
+             "command": "",
+             "windows": {
+                 "command": "taskkill.exe /IM python.exe /F"
+             },
+             "group": "none",
+             "presentation": {
+                 "reveal": "never",
+                 "panel": "dedicated"
+             }
+         },
+         {
+             "label": "PyFRC: _Deploy",
+             "type": "shell",
+             "command": "",
+             "windows": {
+                 "command": "Start-Process powershell {$host.ui.RawUI.WindowTitle = 'FRCwindow';py '${workspaceFolder}\\robot.py' deploy --nc --skip-tests --no-version-check;  Write-Host 'BYEEE - Press Enter to Close' -ForegroundColor Green -BackgroundColor Black; Read-Host -Prompt ' '}"
+             },
+             "group": "none",
+             "presentation": {
+                 "reveal": "never",
+                 "panel": "dedicated"
+             }
+         },
+         {
+             "label": "PyFRC: _Run Sim",
+             "type": "shell",
+             "command": "",
+             "windows": {
+                 "command": "Start-Process powershell {$host.ui.RawUI.WindowTitle = 'FRCwindow';py '${workspaceFolder}\\robot.py' sim;  Write-Host 'BYEEE - Press Enter to Close' -ForegroundColor Green -BackgroundColor Black; Read-Host -Prompt ' '}"
+             },
+             "group": "none",
+             "presentation": {
+                 "reveal": "never",
+                 "panel": "dedicated"
+             }
+         },
+         {
+             "label": "V: Close All FRC Powershell Windows",
+             "type": "shell",
+             "command": "",
+             "windows": {
+                 "command": "Get-Process | Where-Object { $_.MainWindowTitle -like '*FRCwindow' } | Stop-Process"
+             },
+             "group": "none",
+             "presentation": {
+                 "reveal": "never",
+                 "panel": "dedicated"
+             }
+         },
+         {
+             "label": "PyFRC: Deploy current project to the RoboRio and run it",
+             "dependsOn": ["PyFRC: _Kill Python process", "V: Close All FRC Powershell Windows", "PyFRC: _Deploy"],
+         },
+         {
+             "label": "PyFRC: Run current project in the PyFRC simulator",
+             "dependsOn": ["PyFRC: _Kill Python process", "V: Close All FRC Powershell Windows", "PyFRC: _Run Sim"],
+         }
+    ]
+ }
