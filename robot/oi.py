@@ -155,13 +155,17 @@ class OI:
 		def _():
 			yield from robot.intake.intake_then_hold_coroutine()
 
-		@self.driver2.LEFT_TRIGGER_AS_BUTTON.whenPressed(requirements=[robot.leds])
+		@self.driver2.LEFT_BUMPER.whenPressed(requirements=[robot.leds])
 		def _():
 			robot.leds.set_mode(robot.leds.MODE_CUBE)
 
-		@self.driver2.RIGHT_TRIGGER_AS_BUTTON.whenPressed(requirements=[robot.leds])
+		@self.driver2.RIGHT_BUMPER.whenPressed(requirements=[robot.leds])
 		def _():
 			robot.leds.set_mode(robot.leds.MODE_CONE)
+
+		@self.driver2.RIGHT_TRIGGER_AS_BUTTON.whenPressed(requirements=[robot.intake_side])
+		def _():
+			robot.intake_side.intake()
 
 		@self.driver1.B.whenPressed(requirements=[robot.intake])
 		def _():

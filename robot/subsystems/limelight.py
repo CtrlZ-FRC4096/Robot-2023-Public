@@ -44,7 +44,7 @@ class Limelight_Wrapper(Limelight):
 		if not len(results) == 2:
 			return None
 		results.sort(key=lambda x: x.ty)
-		highest = results[1]
+		lowest, highest = results
 		return highest.tx
 
 	@property
@@ -87,7 +87,7 @@ class Limelight_Wrapper(Limelight):
 		if not len(results) == 2:
 			return None
 		results.sort(key=lambda x: x.ty)
-		highest = results[1]
+		lowest, highest = results
 		angle = highest.ty + self.ll_mount_angle
 		angle = math.radians(angle)
 		tape_height = 44
@@ -154,3 +154,4 @@ class Limelight_Wrapper(Limelight):
 			return None
 		nearest = max(results,key=lambda x: x.ta)
 		return nearest.ta
+

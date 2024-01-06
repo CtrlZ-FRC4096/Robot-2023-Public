@@ -6,7 +6,7 @@ Code for robot "swerve drivetrain prototype"
 contact@team4096.org
 
 Some code adapted from:
-https://github.com/Team364/BaseFalconSwerve/
+https://github.com/SwerveDriveSpecialties
 """
 
 DEBUG = True
@@ -28,6 +28,7 @@ import subsystems.leds
 import subsystems.limelight
 import subsystems.arm
 import subsystems.intake
+import subsystems.intake_side
 from wpilibextra.coroutine.coroutine_robot import CoroutineRobot
 from wpilibextra.coroutine.coroutine_logger import CoroutineLogger
 from wpilibextra.viewof import ViewOf
@@ -74,12 +75,14 @@ class Robot(CoroutineRobot):
 		self.intake = subsystems.intake.Intake(self)
 		self.limelight = subsystems.limelight.Limelight_Wrapper()
 		self.leds = subsystems.leds.LEDs(self)
+		self.intake_side = subsystems.intake_side.Intake_Side(self)
 
 		self.subsystems = [
 			self.drivetrain,
 			self.arm,
 			self.intake,
 			self.leds,
+			self.intake_side,
 		]
 
 		self.scheduler.registerSubsystem(self.subsystems)
