@@ -200,7 +200,7 @@ class Arm(Subsystem):
 			self.target_length,self.target_angle = self.SETPOINTS.SETPOINTS[self.path.pop()]
 
 		# Driver 2 Arm Adjustment
-		angle += 10*self.robot.oi.driver2.BOTH_TRIGGERS()
+		# angle += 10*self.robot.oi.driver2.BOTH_TRIGGERS()
 
 		# Gyro Balance
 		if self.gyro_balance:

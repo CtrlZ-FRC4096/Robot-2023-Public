@@ -151,7 +151,10 @@ class Robot(CoroutineRobot):
 		self.intake.intake(0.3) # gives holding power when auto is enabled
 		# self.scheduler.schedule(self.auto_chooser.getSelected())
 		self.scheduler.schedule(self.auto_chooser.getSelected()(self)) # type: ignore
-		# self.scheduler.schedule(autoroutines.score_high_go_over_grab_game_piece(self))
+		# self.scheduler.schedule(autoroutines.score_high_go_all_the_way_over_and_balance(self))
+
+		##Bypass auto chooser
+		#self.scheduler.schedule(autoroutines.path(self))
 
 	### TELEOPERATED ###
 	def teleop_mode(self):

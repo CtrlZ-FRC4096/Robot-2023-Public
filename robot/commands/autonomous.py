@@ -3,14 +3,14 @@ from typing import TYPE_CHECKING
 
 from wpilib._wpilib import SmartDashboard, wait
 from wpimath.controller import PIDController, ProfiledPIDController
-from wpimath.geometry._geometry import Pose2d, Rotation2d
+from wpimath.geometry._geometry import Pose2d, Rotation2d, Translation2d
 from wpimath.kinematics._kinematics import SwerveModuleState
 from wpimath.trajectory import TrapezoidProfile
 
 # from pathplannerlib.swerve_path_controller import SwervePathController
 # from commands.drive_follow_path import DriveFollowPath
 
-# from robotpy import PathPlanner
+from pathplannerlib import PathPlanner
 
 if TYPE_CHECKING:
     from robot import Robot
@@ -44,13 +44,13 @@ class DriveTrajectory(CommandBase):
         super().__init__()
         self.robot = robot
         self.path = path
-        # self.target = PathPlanner.loadPath(self.path, max_vel, max_accel, reversed)
+        self.target = PathPlanner.loadPath(self.path, max_vel, max_accel, reversed)
 
-        self.timer = Timer()
-
-        # rotation = self.target.sample(0).holonomicRotation
         # self.robot.drivetrain.set_gyro(rotation.degrees())
-        # self.robot.drivetrain.odometry.resetPosition(self.target.sample(0).pose, rotation)
+        self.robot.drivetrain.set_yaw(0)
+
+        self.robot.drivetrain.reset_odometry(self.target.sample(0).pose)
+        self.timer = Timer()
 
         self.hcontroller = betterHolonomicDriveController()
         self.timer.start()
@@ -60,15 +60,16 @@ class DriveTrajectory(CommandBase):
         return set([self.robot.drivetrain])
 
     def execute(self):
-        # targetState = self.target.sample(self.timer.get())
-        # currentPose = self.robot.drivetrain.getPose2d()
-        # self.hcontroller.drive(self.robot, currentPose, targetState)
-        ...
+        targetState = self.target.sample(self.timer.get())
+        currentPose = self.robot.drivetrain.get_pose()
+        #print(currentPose)
+        self.hcontroller.drive(self.robot, currentPose, targetState)
+        
 
     def isFinished(self):
-        # finished = self.timer.hasElapsed(self.target.getTotalTime())
-        # return finished
-        return True
+        finished = self.timer.hasElapsed(self.target.getTotalTime())
+        print(finished)
+        return finished
 
     def end(self, interrupted):
         self.timer.stop()
@@ -143,5 +144,10 @@ class betterHolonomicDriveController:
             robotAngle=currentPose.rotation(),
         )
 
-        robot.drivetrain.drive(chassis_speeds)
+        robot.drivetrain.drive(
+            Translation2d(left_right, forward_back), # Switch params?
+            omega,
+            field_relative=True,
+            is_open_loop=False,
+        )
         robot.drivetrain.periodic()
