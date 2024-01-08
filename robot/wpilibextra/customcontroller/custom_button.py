@@ -1,8 +1,10 @@
 from functools import wraps
 from typing import Any, Callable, Generator, List, Union, overload
 
+
+
 from commands2 import Command, Subsystem
-from commands2.button import Button as _Button
+from commands2.button import Trigger as _Button
 
 from ..coroutine import CoroutineCommand
 from ..coroutine.coroutine_command import ensure_generator_function
