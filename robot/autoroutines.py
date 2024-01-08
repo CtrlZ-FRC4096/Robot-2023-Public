@@ -11,6 +11,8 @@ from wpilibextra.coroutine.coroutine_command import commandify
 from wpilib import Timer
 import wpimath.geometry
 import const
+from commands import autonomous
+from commands2 import CommandBase, ParallelCommandGroup, ParallelRaceGroup, SequentialCommandGroup
 
 def _wait(time):
 	timer = Timer()
@@ -27,6 +29,105 @@ def _stationary_spin(robot: "Robot", rotation: float, abs_tol: float = 2):
 			wpimath.geometry.Translation2d(0, 0),
 			rotation
 		)
+
+# @commandify
+# def two_piece(robot: "Robot"):
+# 	yield from score_high(robot)
+# 	yield from _wait(0.5)
+# 	robot.arm.target_setpoint = robot.arm.SETPOINTS.NEUTRAL
+# 	run_path(robot)
+
+@commandify
+def run_path(robot: "Robot"):
+	print("Path ------------------------------------------------")
+	trajectory = autonomous.DriveTrajectory(robot, "Auto", 4, 3, False)
+	trajectory.execute()
+	print("Path Done -------------------------------------------")
+	#yield from _wait(0.1)
+	# robot.drivetrain.stop()
+
+@commandify # men
+def run_parallel_path_group(robot: "Robot"):
+	print("Path starting")
+	trajectory = autonomous.DriveTrajectory(robot, "Auto", 4, 3, False)
+	robot.arm.target_setpoint = robot.arm.SETPOINTS.NEUTRAL
+	timer = Timer()
+	timer.start()
+	while not (trajectory.isFinished()):
+		trajectory.execute()
+		while (timer.hasElapsed(2)) and not (timer.hasElapsed(2.75)):
+			robot.intake_side.hatch_down()
+			robot.intake_side.intake()
+			yield
+        # robot.intake_side.periodic()
+		yield
+	trajectory.end
+	robot.intake_side.hatch_up()
+@commandify
+def run_2_piece_auto_path(robot: "Robot"):
+	print("Starting Path")
+	trajectory = autonomous.DriveTrajectory(robot, "2 Piece (McNugget)", 4, 3, False)
+	robot.arm.target_setpoint = robot.arm.SETPOINTS.NEUTRAL
+	timer = Timer()
+	timer.start()
+	while not (trajectory.isFinished()):
+		trajectory.execute()
+		while (timer.hasElapsed(1.5)) and not (timer.hasElapsed(2.5)):
+			robot.intake_side.hatch_down()
+			robot.intake_side.intake()
+			yield
+		yield
+	trajectory.end
+	robot.intake_side.hatch_up()
+
+@commandify	
+def run_3_piece_auto_path(robot: "Robot"): 
+	yield from score_high(robot)
+	print("Starting Path")
+	trajectory = autonomous.DriveTrajectory(robot, "2 Piece (McNugget)", 1, 1, False)
+	robot.arm.target_setpoint = robot.arm.SETPOINTS.NEUTRAL
+	timer = Timer()
+	timer.start()
+	while not (trajectory.isFinished()):
+		trajectory.execute()
+		while (timer.hasElapsed(1.5)) and not (timer.hasElapsed(2.5)):
+			robot.intake_side.hatch_down()
+			robot.intake_side.intake()
+			yield
+		robot.intake_side.hatch_up()
+		while (timer.hasElapsed(4)) and not (timer.hasElapsed(5)):
+			robot.intake_side.hatch_down()
+			robot.intake_side.intake()
+			yield
+		yield
+	trajectory.end
+	robot.intake_side.hatch_up()
+	#something = trajectory.execute()
+	#intaking_method = robot.intake_side.intake_then_hold_coroutine()
+	#trajectory.execute()
+	#drive_and_set = ParallelCommandGroup(trajectory, hatch_intake, intake_go_down)
+	# robot.intake_side.hatch_up()
+	# timer = Timer()
+	# timer.start()
+	# while not (timer.hasElapsed(1)):
+	# 	robot.intake_side.periodic()
+	# 	yield
+	# timer.reset()
+
+	print('Path Done ------------------------------')
+	# first_loop = True
+	# while not (trajectory.isFinished()):
+	# 	if first_loop:
+	# 		drive_and_set.execute()
+	# 		first_loop = False
+	# 	yield from robot.side_intake.periodic()
+	# 	print("in loop")
+	# 	robot.intake_side.hatch_down()
+	# robot.intake_side.hatch_up()
+	
+	
+	
+
 
 @commandify # Last checked 4/14/23, Status: Good
 def score_high(robot: "Robot"):

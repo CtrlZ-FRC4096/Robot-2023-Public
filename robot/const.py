@@ -1,9 +1,14 @@
 """
 Ctrl-Z FRC Team 4096
-FIRST Robotics Competition 2023
+FIRST Robotics Competition 2022
 Code for robot "swerve drivetrain prototype"
 contact@team4096.org
 
+Some code adapted from:
+https://github.com/SwerveDriveSpecialties
+
+Some code adapted from:
+https://github.com/SwerveDriveSpecialties
 """
 
 """
@@ -100,7 +105,7 @@ SWERVE_CANCODER_ID_BACK_RIGHT = 28  # 2
 
 # Other
 
-SWERVE_WHEEL_CIRCUMFERENCE = 2 * math.pi * (4 * 2.54 / 100)
+SWERVE_WHEEL_CIRCUMFERENCE = math.pi * (4 * 2.54 / 100) # C = pi*d
 SWERVE_DRIVE_GEAR_RATIO = 6.55  # From belt kit we ordered
 SWERVE_ANGLE_GEAR_RATIO = 10.29  # From Swerve X user guide, for flipped, belt models
 
@@ -108,15 +113,38 @@ SWERVE_DRIVE_MOTOR_INVERTED = True
 SWERVE_ANGLE_MOTOR_INVERTED = True
 
 SWERVE_KINEMATICS = SwerveDrive4Kinematics(
-    Translation2d(DRIVETRAIN_WHEELBASE_METERS / 2, DRIVETRAIN_TRACKWIDTH_METERS / 2),
-    Translation2d(DRIVETRAIN_WHEELBASE_METERS / 2, -DRIVETRAIN_TRACKWIDTH_METERS / 2),
-    Translation2d(-DRIVETRAIN_WHEELBASE_METERS / 2, DRIVETRAIN_TRACKWIDTH_METERS / 2),
-    Translation2d(-DRIVETRAIN_WHEELBASE_METERS / 2, -DRIVETRAIN_TRACKWIDTH_METERS / 2),
+    Translation2d(DRIVETRAIN_WHEELBASE_METERS/2.0, DRIVETRAIN_TRACKWIDTH_METERS/2.0),
+    Translation2d(DRIVETRAIN_WHEELBASE_METERS/2.0, -DRIVETRAIN_TRACKWIDTH_METERS/2.0),
+    Translation2d(-DRIVETRAIN_WHEELBASE_METERS/2.0, DRIVETRAIN_TRACKWIDTH_METERS/2.0),
+    Translation2d(-DRIVETRAIN_WHEELBASE_METERS/2.0, -DRIVETRAIN_TRACKWIDTH_METERS/2.0),
 )
 
 SWERVE_PIGEON_ID = 0  # 12
 
 SWERVE_INVERT_GYRO = False
 SWERVE_INVERT_CANCODERS = False
+
+CAN_PDH = 13
+
+# Auto
+AUTO_RESOLUTION = 0.02  # path resolution in seconds
+MAX_VEL_METERS_AUTO = 4  # This is the max velocity you want the robot to drive at, not its true max velocity
+MAX_ANG_VEL_RAD_AUTO = MAX_VEL_METERS_AUTO / math.hypot(
+    DRIVETRAIN_TRACKWIDTH_METERS / 2.0, DRIVETRAIN_WHEELBASE_METERS / 2.0
+)  # This is the max velocity you want the robot to rotate at, not its true max rotational velocity
+MAX_ACCEL_AUTO = 3  # This is the max rate you want the robot to accelerate at, not its true max acceleration
+MAX_ANG_ACCEL_AUTO = (
+    6 * math.pi
+)  # This is the max rate you want the robot to accelerate at, not its true max acceleration
+X_KP = 6 #5  # 0.12667925	#0.73225
+X_KI = 0.0 #0.015  # 0.015 #0.0346173		#0.2001
+X_KD = 0.01  # 0.01165449	#0.067367
+Y_KP = X_KP
+Y_KI = X_KI
+Y_KD = X_KD
+THETA_KP = 5#1.9 #0.232  # * 2.866 * 5.0
+THETA_KI = 0.07#0.0625  # * 2.866 * 5.0
+THETA_KD = 0.0
+
 
 JENNY = 8675_309

@@ -6,7 +6,7 @@ Code for robot "swerve drivetrain prototype"
 contact@team4096.org
 
 Some code adapted from:
-https://github.com/Team364/BaseFalconSwerve/
+https://github.com/SwerveDriveSpecialties
 """
 
 DEBUG = True
@@ -28,6 +28,7 @@ import subsystems.leds
 import subsystems.limelight
 import subsystems.arm
 import subsystems.intake
+import subsystems.intake_side
 from wpilibextra.coroutine.coroutine_robot import CoroutineRobot
 from wpilibextra.coroutine.coroutine_logger import CoroutineLogger
 from wpilibextra.viewof import ViewOf
@@ -74,12 +75,14 @@ class Robot(CoroutineRobot):
 		self.intake = subsystems.intake.Intake(self)
 		self.limelight = subsystems.limelight.Limelight_Wrapper()
 		self.leds = subsystems.leds.LEDs(self)
+		self.intake_side = subsystems.intake_side.Intake_Side(self)
 
 		self.subsystems = [
 			self.drivetrain,
 			self.arm,
 			self.intake,
 			self.leds,
+			self.intake_side,
 		]
 
 		self.scheduler.registerSubsystem(self.subsystems)
@@ -148,7 +151,10 @@ class Robot(CoroutineRobot):
 		self.intake.intake(0.3) # gives holding power when auto is enabled
 		# self.scheduler.schedule(self.auto_chooser.getSelected())
 		self.scheduler.schedule(self.auto_chooser.getSelected()(self)) # type: ignore
-		# self.scheduler.schedule(autoroutines.score_high_go_over_grab_game_piece(self))
+		# self.scheduler.schedule(autoroutines.score_high_go_all_the_way_over_and_balance(self))
+
+		##Bypass auto chooser
+		#self.scheduler.schedule(autoroutines.path(self))
 
 	### TELEOPERATED ###
 	def teleop_mode(self):

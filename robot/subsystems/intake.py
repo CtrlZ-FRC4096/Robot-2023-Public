@@ -16,7 +16,6 @@ class Intake(SubsystemBase):
 		super().__init__()
 		self.robot = robot
 		self.motor = ctre.WPI_TalonSRX(6)
-		self.motor.config_kP(0, 0.1)
 		self.has_gamepiece = False
 
 	def stop(self):
